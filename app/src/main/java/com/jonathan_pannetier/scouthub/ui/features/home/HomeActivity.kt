@@ -61,6 +61,7 @@ class HomeActivity : AppCompatActivity(), HomeContract.View, OnClickListener<Rep
 
     override fun onItemClicked(data: Repository) {
         toast("${data.name} clicked!")
+        // start new activity by passing the ID of the repository
     }
 
     private fun initAdapter() {
