@@ -8,23 +8,19 @@ import android.widget.TextView
 import com.jonathan_pannetier.scouthub.R
 import com.jonathan_pannetier.scouthub.base.BaseRecyclerAdapter
 import com.jonathan_pannetier.scouthub.base.BaseViewHolder
-import com.jonathan_pannetier.scouthub.base.interfaces.OnClickListener
 import com.jonathan_pannetier.scouthub.data.models.Repository
 
 class HomeRecyclerAdapter(context: Context, items: ArrayList<Repository> = arrayListOf()) :
     BaseRecyclerAdapter<Repository, HomeRecyclerAdapter.RepositoryViewHolder>(context, items) {
 
-    override fun setViewHolder(
-        parent: ViewGroup, viewType: Int, clickListener: OnClickListener?
-    ): RepositoryViewHolder {
+    override fun setViewHolder(parent: ViewGroup, viewType: Int): RepositoryViewHolder {
         return RepositoryViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.item_repository, parent, false),
-            clickListener
+            LayoutInflater.from(context).inflate(R.layout.item_repository, parent, false)
         )
     }
 
-    inner class RepositoryViewHolder(val view: View, clickListener: OnClickListener?) :
-        BaseViewHolder<Repository>(view, clickListener) {
+    inner class RepositoryViewHolder(val view: View) :
+        BaseViewHolder<Repository>(view) {
         val name: TextView = view.findViewById<TextView>(R.id.name)
         val watchers: TextView = view.findViewById<TextView>(R.id.watchers)
         val lang: TextView = view.findViewById<TextView>(R.id.lang)

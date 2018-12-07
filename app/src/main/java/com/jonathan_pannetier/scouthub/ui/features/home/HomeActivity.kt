@@ -13,7 +13,7 @@ import com.jonathan_pannetier.scouthub.extensions.toast
 import com.jonathan_pannetier.scouthub.extensions.visible
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : AppCompatActivity(), HomeContract.View, OnClickListener {
+class HomeActivity : AppCompatActivity(), HomeContract.View, OnClickListener<Repository> {
 
     private lateinit var presenter: HomePresenter
     private lateinit var repositoriesAdapter: HomeRecyclerAdapter
@@ -59,8 +59,8 @@ class HomeActivity : AppCompatActivity(), HomeContract.View, OnClickListener {
         }
     }
 
-    override fun onItemClicked(position: Int) {
-        toast("Item clicked")
+    override fun onItemClicked(data: Repository) {
+        toast("${data.name} clicked!")
     }
 
     private fun initAdapter() {

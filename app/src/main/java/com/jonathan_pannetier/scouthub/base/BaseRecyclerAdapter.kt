@@ -8,12 +8,20 @@ import com.jonathan_pannetier.scouthub.base.interfaces.OnClickListener
 abstract class BaseRecyclerAdapter<T, VH : BaseViewHolder<T>>(val context: Context, val items: ArrayList<T>) :
     RecyclerView.Adapter<VH>() {
 
-    var onClickListener: OnClickListener? = null
+    var onClickListener: OnClickListener<T>? = null
 
-    abstract fun setViewHolder(parent: ViewGroup, viewType: Int, clickListener: OnClickListener?): VH
+    abstract fun setViewHolder(parent: ViewGroup, viewType: Int): VH
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = setViewHolder(parent, viewType, onClickListener)
-    override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(position, items[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = setViewHolder(parent, viewType)
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        holder.apply {
+            itemView.setOnClickListener {
+                onClickListener?.onItemClicked(items[position])
+            }
+            bind(position, items[position])
+        }
+    }
+
     override fun getItemCount() = items.size
 
     fun setItems(data: List<T>) {
