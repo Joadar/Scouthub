@@ -2,6 +2,7 @@ package com.jonathan_pannetier.scouthub.data.remote
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.jonathan_pannetier.scouthub.BuildConfig
 import com.jonathan_pannetier.scouthub.ENDPOINT
 import okhttp3.OkHttpClient
@@ -48,7 +49,7 @@ class APIManager {
         Retrofit.Builder().baseUrl(ENDPOINT)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }
 

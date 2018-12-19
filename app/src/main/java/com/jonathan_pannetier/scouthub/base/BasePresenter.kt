@@ -1,39 +1,36 @@
 package com.jonathan_pannetier.scouthub.base
 
-import android.util.Log
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.runBlocking
 
 
 abstract class BasePresenter<V : BaseContract.View<T>, T> : BaseContract.Presenter {
 
-    private var disposable: Disposable? = null
+    private var job: Deferred<T>? = null
     var view: V? = null
 
     companion object {
         private const val TAG = "BasePresenter"
     }
 
-    fun getData(data: Single<T>) {
+    fun getData(data: Deferred<T>) = runBlocking {
+        job = data
         view?.displayProgress(true)
+        val value: T? = job?.await()
+        view?.displayProgress(false)
 
-        disposable = data
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-                view?.displayProgress(false)
-                view?.displayData(it)
-            }, {
-                Log.e(TAG, "getData() for $data -> ${it.message}")
-                view?.displayProgress(false)
-                view?.displayError(it.message ?: "")
-            })
+        if (value != null) {
+            view?.also {
+                it.displayData(value)
+            }
+        } else {
+            view?.also {
+                it.displayError("Error on fetching data")
+            }
+        }
     }
 
     override fun onDestroy() {
-        disposable?.dispose()
+        job?.cancel()
     }
 }
